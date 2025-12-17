@@ -33,7 +33,7 @@ public class VidexiumapiApplication {
 	@Autowired
 	private Environment environment;
 
-	private LocalDateTime dataHoraImplantacao = LocalDateTime.now();
+	private final LocalDateTime dataHoraImplantacao = LocalDateTime.now();
 
 	public static void main(String[] args) {
 		SpringApplication.run(VidexiumapiApplication.class, args);

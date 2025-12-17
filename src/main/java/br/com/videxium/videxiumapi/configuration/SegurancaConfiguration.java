@@ -22,8 +22,8 @@ public class SegurancaConfiguration {
     private static final String[] PUBLIC_ENDPOINT = {
             "/",
             "/api",
+            "/api/usuario",
             "/api/login",
-            "/api/signup",
             "/api/validate-email",
             "/api/verify-email",
             "/api/resend-verification",
