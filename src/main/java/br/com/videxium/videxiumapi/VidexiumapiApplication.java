@@ -2,19 +2,19 @@ package br.com.videxium.videxiumapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import java.net.InetAddress;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,8 +22,8 @@ import java.util.LinkedHashMap;
 
 @SpringBootApplication
 @RestController
-@RequestMapping({ "/", "" })
-public class VidexiumapiApplication implements CommandLineRunner {
+@RequestMapping({ "", "/", "/api" })
+public class VidexiumapiApplication {
 
 	private static final Logger log = LoggerFactory.getLogger(VidexiumapiApplication.class);
 
@@ -40,7 +40,7 @@ public class VidexiumapiApplication implements CommandLineRunner {
 	}
 
 	@GetMapping
-	public LinkedHashMap<String, String> getInformation() throws UnknownHostException {
+	public LinkedHashMap<String, String> getInformation(HttpServletRequest httpServletRequest) throws UnknownHostException {
 
 		LinkedHashMap<String, String> informacao = new LinkedHashMap<>();
 		informacao.put("Aplicação", "VidexiumService");
@@ -51,12 +51,7 @@ public class VidexiumapiApplication implements CommandLineRunner {
 		informacao.put("Versão", versao);
 		informacao.put("Endereço", InetAddress.getLocalHost().getHostAddress());
 		informacao.put("Demanda", getDemanda());
-		informacao.put("URL", "http://"
-			.concat(informacao.get("Endereço")
-			.concat(":")
-			.concat(informacao.get("Porta")
-			.concat("/")))
-		);
+		informacao.put("URL", httpServletRequest.getRequestURL().toString());
 
 		log.warn("{}", imprimirLog(informacao));
 
@@ -80,11 +75,6 @@ public class VidexiumapiApplication implements CommandLineRunner {
 		} catch (JsonProcessingException e) {
 			return "[Erro ao converter objeto para JSON]";
 		}
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		this.getInformation();
 	}
 
 }
