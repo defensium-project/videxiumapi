@@ -7,6 +7,7 @@ import br.com.videxium.videxiumapi.exception.BadCredentialException;
 import br.com.videxium.videxiumapi.exception.ResourceNotFoundException;
 import br.com.videxium.videxiumapi.repository.UsuarioImplementacaoRepository;
 import br.com.videxium.videxiumapi.repository.UsuarioRepository;
+import br.com.videxium.videxiumapi.transfer.RedefinirSenhaUsuarioRequestTransfer;
 import br.com.videxium.videxiumapi.transfer.UsuarioAcessarSistemaRequestTransfer;
 import br.com.videxium.videxiumapi.transfer.UsuarioAcessarSistemaResponseTransfer;
 import br.com.videxium.videxiumapi.util.JwtUtil;
@@ -92,5 +93,23 @@ public class AutenticadorService {
         return Map.of("mensagem", "E-mail Verificado com Sucesso!");
     }
 
+    public Map<String, Object> redefinirSenhaUsuario(RedefinirSenhaUsuarioRequestTransfer redefinirSenhaUsuarioRequestTransfer) {
+
+        UsuarioEntity usuarioEntity = usuarioImplementacaoRepository
+                .recuperarUsuario(redefinirSenhaUsuarioRequestTransfer.getUsuario())
+                .orElseThrow(() -> {
+                    throw new BadCredentialException("Não foi possível recuperar o usuário!");
+                });
+
+        if (!passwordEncoder.matches(redefinirSenhaUsuarioRequestTransfer.getSenhaAntiga(), usuarioEntity.getSenha())) {
+            throw new BadCredentialException("A senha atual informada está incorreta!");
+        }
+
+        usuarioEntity.setSenha(passwordEncoder.encode(redefinirSenhaUsuarioRequestTransfer.getSenhaNova()));
+
+        usuarioRepository.save(usuarioEntity);
+
+        return Map.of("mensagem", "Senha alterada com Sucesso!");
+    }
 
 }

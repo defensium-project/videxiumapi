@@ -26,7 +26,7 @@ public class EmailService {
             simpleMailMessage.setTo(toEmail);
             simpleMailMessage.setSubject("Videxium: Verificação de E-mail");
 
-        String linkVerificacao = "http://127.0.1.1:8080/api/autenticador/verificar-email?token=" + token;
+        String linkVerificacao = "http://127.0.1.1:8080/api/autenticador/verificar-conta?token=" + token;
 
         String body = """
             Clique no link abaixo para validar sua conta.
