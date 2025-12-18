@@ -31,8 +31,6 @@ public class AutenticadorService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Usuario pode estar inativo
-    // A conta pode não estar verificada
     public UsuarioAcessarSistemaResponseTransfer acessarSistema(UsuarioAcessarSistemaRequestTransfer usuarioAcessarSistemaRequestTransfer) {
 
         Optional<UsuarioEntity> usuarioEntityOptional = Optional.ofNullable(this.usuarioImplementacaoRepository
@@ -45,7 +43,7 @@ public class AutenticadorService {
         }
 
         if (!usuarioEntityOptional.get().getIsContaVerificada()) {
-            throw new AccountNotVerifiedException("A conta informada está inativa!");
+            throw new AccountNotVerifiedException("A conta informada não foi verificada!");
         }
 
         UsuarioAcessarSistemaResponseTransfer usuarioAcessarSistemaResponseTransfer = new UsuarioAcessarSistemaResponseTransfer();
