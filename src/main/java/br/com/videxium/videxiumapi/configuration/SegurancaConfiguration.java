@@ -23,12 +23,7 @@ public class SegurancaConfiguration {
             "/",
             "/api",
             "/api/usuario",
-            "/api/login",
-            "/api/validate-email",
-            "/api/verify-email",
-            "/api/resend-verification",
-            "/api/forgot-password",
-            "/api/reset-password"
+            "api/autenticador/acessar"
     };
 
     @Bean

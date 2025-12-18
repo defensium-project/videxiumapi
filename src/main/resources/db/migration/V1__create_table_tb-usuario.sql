@@ -6,6 +6,7 @@ create table if not exists tb_usuario (
     usuario varchar(255) not null,
     senha varchar(255) not null,
     token varchar(255) null,
+    is_conta_verificada boolean null default false,
     created_at timestamp not null default now(),
     updated_at timestamp null,
     deleted_at timestamp null,

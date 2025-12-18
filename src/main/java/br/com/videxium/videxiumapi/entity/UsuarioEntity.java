@@ -32,6 +32,9 @@ public class UsuarioEntity {
     @Column(name = "token", unique = true)
     private String token;
 
+    @Column(name = "is_conta_verificada")
+    private Boolean isContaVerificada = false;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
@@ -100,6 +103,14 @@ public class UsuarioEntity {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Boolean getIsContaVerificada() {
+        return isContaVerificada;
+    }
+
+    public void setIsContaVerificada(Boolean contaVerificada) {
+        isContaVerificada = contaVerificada;
     }
 
     public Instant getCreatedAt() {
