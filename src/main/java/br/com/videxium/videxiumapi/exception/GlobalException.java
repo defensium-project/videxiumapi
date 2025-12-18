@@ -26,6 +26,11 @@ public class GlobalException {
         return buildResponse(HttpStatus.FORBIDDEN, accountNotVerifiedException.getMessage());
     }
 
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> exception(ResourceAlreadyExistsException resourceAlreadyExistsException) {
+        return buildResponse(HttpStatus.BAD_REQUEST, resourceAlreadyExistsException.getMessage());
+    }
+
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus httpStatus, String message) {
         Map<String, Object> objeto = Map.of("Data Requisição", Instant.now(), "Erro", message);
         return ResponseEntity.status(httpStatus).body(objeto);
