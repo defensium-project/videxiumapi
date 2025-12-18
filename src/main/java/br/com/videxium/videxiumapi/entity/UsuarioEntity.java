@@ -29,8 +29,11 @@ public class UsuarioEntity {
     @Column(name = "senha", nullable = false)
     private String senha;
 
-    @Column(name = "token", unique = true)
+    @Column(name = "token", unique = true, nullable = false)
     private String token;
+
+    @Column(name = "hash_cadastro", unique = true)
+    private String hashCadastro;
 
     @Column(name = "is_conta_verificada")
     private Boolean isContaVerificada = false;
@@ -145,4 +148,19 @@ public class UsuarioEntity {
         this.active = active;
     }
 
+    public String getHashCadastro() {
+        return hashCadastro;
+    }
+
+    public void setHashCadastro(String hashCadastro) {
+        this.hashCadastro = hashCadastro;
+    }
+
+    public Boolean getContaVerificada() {
+        return isContaVerificada;
+    }
+
+    public void setContaVerificada(Boolean contaVerificada) {
+        isContaVerificada = contaVerificada;
+    }
 }

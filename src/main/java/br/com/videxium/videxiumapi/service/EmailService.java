@@ -24,11 +24,13 @@ public class EmailService {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setFrom(fromEmail);
             simpleMailMessage.setTo(toEmail);
-            simpleMailMessage.setSubject("[VidexiumService] Verificação de E-mail");
+            simpleMailMessage.setSubject("Videxium: Verificação de E-mail");
 
-        String linkVerificacao = "http://127.0.1.1:8080/verify-email?token=".concat(token);
+        String linkVerificacao = "http://127.0.1.1:8080/api/autenticador/verificar-email?token=" + token;
 
-        String body = "Bem vindo ao sistema Videxium. Clique no link " + linkVerificacao + " para validar sua conta!";
+        String body = """
+            Clique no link abaixo para validar sua conta.
+        """.concat(linkVerificacao);
 
         simpleMailMessage.setText(body);
 

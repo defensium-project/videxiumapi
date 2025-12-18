@@ -27,4 +27,15 @@ public class UsuarioImplementacaoRepository {
         return typedQuery.getResultList().stream().findFirst();
     }
 
+    public Optional<UsuarioEntity> recuperarHashCadastro(String hashCadastro) {
+        String query = """
+                SELECT usuarioEntity
+                FROM UsuarioEntity usuarioEntity
+                WHERE usuarioEntity.hashCadastro = :hashCadastroParameter
+        """;
+        TypedQuery<UsuarioEntity> typedQuery = this.entityManager.createQuery(query, UsuarioEntity.class);
+        typedQuery.setParameter("hashCadastroParameter", hashCadastro);
+        return typedQuery.getResultList().stream().findFirst();
+    }
+
 }

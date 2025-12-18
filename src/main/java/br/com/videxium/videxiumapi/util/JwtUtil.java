@@ -3,10 +3,12 @@ package br.com.videxium.videxiumapi.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.security.MessageDigest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +75,10 @@ public class JwtUtil {
         } catch (Exception exception) {
             return false;
         }
+    }
+
+    public String gerarHashToken(String token) {
+        return DigestUtils.sha256Hex(token);
     }
 
 }

@@ -2,6 +2,7 @@ package br.com.videxium.videxiumapi.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -29,6 +30,16 @@ public class GlobalException {
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<Map<String, Object>> exception(ResourceAlreadyExistsException resourceAlreadyExistsException) {
         return buildResponse(HttpStatus.BAD_REQUEST, resourceAlreadyExistsException.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> exception(HttpMessageNotReadableException httpMessageNotReadableException) {
+        return buildResponse(HttpStatus.BAD_GATEWAY, "A estrutura da requisição está errada!");
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> exception(ResourceNotFoundException resourceNotFoundException) {
+        return buildResponse(HttpStatus.NOT_FOUND, resourceNotFoundException.getMessage());
     }
 
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus httpStatus, String message) {

@@ -5,8 +5,11 @@ import br.com.videxium.videxiumapi.exception.ResourceAlreadyExistsException;
 import br.com.videxium.videxiumapi.repository.UsuarioImplementacaoRepository;
 import br.com.videxium.videxiumapi.repository.UsuarioRepository;
 import br.com.videxium.videxiumapi.util.JwtUtil;
+import org.hibernate.validator.cfg.defs.UUIDDef;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class UsuarioService {
@@ -42,6 +45,7 @@ public class UsuarioService {
 
         usuarioEntity.setSenha(passwordEncoder.encode(usuarioEntity.getSenha()));
         usuarioEntity.setToken(jwtUtil.generateToken(usuarioEntity.getUsuario(), usuarioEntity.getPerfil()));
+        usuarioEntity.setHashCadastro(jwtUtil.gerarHashToken(usuarioEntity.getToken()));
 
         this.usuarioRepository.save(usuarioEntity);
 
@@ -51,7 +55,7 @@ public class UsuarioService {
     }
 
     private void enviarEmail(UsuarioEntity usuarioEntity) {
-        this.emailService.enviarEmail(usuarioEntity.getUsuario(), usuarioEntity.getToken());
+        this.emailService.enviarEmail(usuarioEntity.getUsuario(), usuarioEntity.getHashCadastro());
     }
 
 }
