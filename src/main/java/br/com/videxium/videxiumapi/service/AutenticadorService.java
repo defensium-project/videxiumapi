@@ -56,7 +56,7 @@ public class AutenticadorService {
         UsuarioAcessarSistemaResponseTransfer usuarioAcessarSistemaResponseTransfer = new UsuarioAcessarSistemaResponseTransfer();
             usuarioAcessarSistemaResponseTransfer.setUsuario(usuarioEntityOptional.get().getUsuario());
             usuarioAcessarSistemaResponseTransfer.setNome(usuarioEntityOptional.get().getNome());
-            usuarioAcessarSistemaResponseTransfer.setToken(jwtUtil.generateToken(usuarioEntityOptional.get().getUsuario(), usuarioEntityOptional.get().getPerfil()));
+            usuarioAcessarSistemaResponseTransfer.setToken(usuarioEntityOptional.get().getToken());
         return usuarioAcessarSistemaResponseTransfer;
     }
 
