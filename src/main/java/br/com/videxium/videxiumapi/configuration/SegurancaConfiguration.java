@@ -24,7 +24,8 @@ public class SegurancaConfiguration {
             "/api",
             "/api/usuario",
             "api/autenticador/acessar",
-            "/api/autenticador/verificar-email"
+            "/api/autenticador/verificar-email",
+            "/api/autenticador/reenviar-email"
     };
 
     @Bean

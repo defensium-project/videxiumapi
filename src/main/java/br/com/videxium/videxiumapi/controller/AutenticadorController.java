@@ -28,4 +28,9 @@ public class AutenticadorController {
         return ResponseEntity.ok(this.autenticadorService.verificarEmail(token));
     }
 
+    @PostMapping("/reenviar-email")
+    public ResponseEntity<Map<String, Object>> reenviarEmail(@RequestBody UsuarioAcessarSistemaRequestTransfer usuarioAcessarSistemaRequestTransfer) {
+        return ResponseEntity.ok().body(autenticadorService.reenviarEmail(usuarioAcessarSistemaRequestTransfer));
+    }
+
 }
