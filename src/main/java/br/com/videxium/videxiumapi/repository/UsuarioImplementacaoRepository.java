@@ -1,11 +1,12 @@
 package br.com.videxium.videxiumapi.repository;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
+
 import br.com.videxium.videxiumapi.entity.UsuarioEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public class UsuarioImplementacaoRepository {

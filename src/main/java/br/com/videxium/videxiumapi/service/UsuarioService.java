@@ -3,7 +3,8 @@ package br.com.videxium.videxiumapi.service;
 import java.time.Instant;
 import java.util.Arrays;
 
-import br.com.videxium.videxiumapi.transfer.UsuarioAtualizarRequestTransfer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,11 @@ import br.com.videxium.videxiumapi.exception.ResourceAlreadyExistsException;
 import br.com.videxium.videxiumapi.exception.ResourceNotFoundException;
 import br.com.videxium.videxiumapi.repository.UsuarioImplementacaoRepository;
 import br.com.videxium.videxiumapi.repository.UsuarioRepository;
+import br.com.videxium.videxiumapi.transfer.PageResponseTransfer;
+import br.com.videxium.videxiumapi.transfer.UsuarioAtualizarRequestTransfer;
+import br.com.videxium.videxiumapi.transfer.UsuarioResponseTransfer;
 import br.com.videxium.videxiumapi.util.JwtUtil;
+import br.com.videxium.videxiumapi.util.PaginationUtil;
 
 @Service
 public class UsuarioService {
@@ -85,6 +90,21 @@ public class UsuarioService {
     		usuarioCadastrado.setUpdatedAt(Instant.now());
     	
     	return this.usuarioRepository.save(usuarioCadastrado);
+    }
+
+    public PageResponseTransfer<UsuarioResponseTransfer> recuperarTodos(int page, int size, String search) {
+
+        Pageable pageable = PaginationUtil.createPageRequest(page, size, "code");
+
+        Page<UsuarioEntity> usuarioEntityPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            usuarioEntityPage = usuarioRepository.recuperarTodosPor(search, pageable);
+        } else {
+            usuarioEntityPage = usuarioRepository.findAll(pageable);
+        }
+
+        return PaginationUtil.toPageResponse(usuarioEntityPage, UsuarioResponseTransfer::fromEntity);
     }
 
 }
