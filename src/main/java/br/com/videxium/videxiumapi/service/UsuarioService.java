@@ -1,15 +1,20 @@
 package br.com.videxium.videxiumapi.service;
 
-import br.com.videxium.videxiumapi.entity.UsuarioEntity;
-import br.com.videxium.videxiumapi.exception.ResourceAlreadyExistsException;
-import br.com.videxium.videxiumapi.repository.UsuarioImplementacaoRepository;
-import br.com.videxium.videxiumapi.repository.UsuarioRepository;
-import br.com.videxium.videxiumapi.util.JwtUtil;
-import org.hibernate.validator.cfg.defs.UUIDDef;
+import java.time.Instant;
+import java.util.Arrays;
+
+import br.com.videxium.videxiumapi.transfer.UsuarioAtualizarRequestTransfer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import br.com.videxium.videxiumapi.entity.UsuarioEntity;
+import br.com.videxium.videxiumapi.enumeration.PerfilUsuarioEnumeration;
+import br.com.videxium.videxiumapi.exception.RegraNegocialException;
+import br.com.videxium.videxiumapi.exception.ResourceAlreadyExistsException;
+import br.com.videxium.videxiumapi.exception.ResourceNotFoundException;
+import br.com.videxium.videxiumapi.repository.UsuarioImplementacaoRepository;
+import br.com.videxium.videxiumapi.repository.UsuarioRepository;
+import br.com.videxium.videxiumapi.util.JwtUtil;
 
 @Service
 public class UsuarioService {
@@ -38,6 +43,8 @@ public class UsuarioService {
     }
 
     public UsuarioEntity cadastrar(UsuarioEntity usuarioEntity) {
+    	
+    	this.validarPerfilUsuario(usuarioEntity.getPerfil());
 
         this.usuarioImplementacaoRepository.recuperarUsuario(usuarioEntity.getUsuario()).ifPresent(usuario -> {
             throw new ResourceAlreadyExistsException("Usuário já cadastrado na Base de Dados!");
@@ -56,6 +63,28 @@ public class UsuarioService {
 
     private void enviarEmail(UsuarioEntity usuarioEntity) {
         this.emailService.enviarEmail(usuarioEntity.getUsuario(), usuarioEntity.getHashCadastro());
+    }
+    
+    private void validarPerfilUsuario(String perfil) {
+    	if (Arrays.stream(PerfilUsuarioEnumeration.values())
+    			.noneMatch(perfilUsuario -> perfilUsuario.name().equalsIgnoreCase(perfil))) {
+    		throw new RegraNegocialException("Usuário sem privilégios suficiente para realizar essa operação!");
+    	}
+    }
+    
+    public UsuarioEntity atualizar(UsuarioAtualizarRequestTransfer usuarioAtualizarRequestTransfer) {
+    	
+    	UsuarioEntity usuarioCadastrado = this.usuarioRepository
+    			.findById(usuarioAtualizarRequestTransfer.getCode())
+                .orElseThrow(() -> {
+                    throw new ResourceNotFoundException("Falha ao tentar recuperar o usuário!");
+                });
+    	
+    		usuarioCadastrado.setNome(usuarioAtualizarRequestTransfer.getNome());
+    		usuarioCadastrado.setUsuario(usuarioAtualizarRequestTransfer.getUsuario());
+    		usuarioCadastrado.setUpdatedAt(Instant.now());
+    	
+    	return this.usuarioRepository.save(usuarioCadastrado);
     }
 
 }

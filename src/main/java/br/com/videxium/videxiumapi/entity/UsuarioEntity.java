@@ -52,7 +52,11 @@ public class UsuarioEntity {
 
     public UsuarioEntity() {}
 
-    public Long getCode() {
+    public UsuarioEntity(Long code) {
+		this.code = code;
+	}
+
+	public Long getCode() {
         return code;
     }
 
